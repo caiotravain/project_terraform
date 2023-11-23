@@ -10,3 +10,5 @@ data "template_cloudinit_config" "ec2_application" {
     })
   }
 }
+
+

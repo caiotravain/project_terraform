@@ -56,6 +56,12 @@ resource "aws_autoscaling_group" "example_asg" {
   health_check_type          = "EC2"  # Use EC2 for health checks
   health_check_grace_period  = 300    # Wait for 300 seconds before checking the health of a newly launched instance
   force_delete               = true   # Terminate instances in the Auto Scaling Group when the ASG is destroyed
+  #add tag to the autoscaling group
+  tag {
+    key                 = "Name"
+    value               = "caio"
+    propagate_at_launch = true
+  }
 mixed_instances_policy {
   launch_template {
       launch_template_specification {
@@ -63,8 +69,30 @@ mixed_instances_policy {
         version            = "$Latest"
       }
     }
+    
 }
+
 }
+#create a log bucket for the autoscaling group
+# resource "aws_s3_bucket" "autoscaling_log" {
+#   bucket = "travas-bucket-log"
+#   tags = {
+#     Name = "caio-autoscaling-log"
+#   }
+# }
+
+
+
+#connect the log group to the log bucket
+# resource "aws_cloudwatch_log_subscription_filter" "autoscaling_log" {
+#   name            = "travas-bucket-log"
+#   log_group_name  = aws_cloudwatch_log_group.autoscaling_log.name
+#   filter_pattern  = ""
+#   destination_arn = "arn:aws:s3:::travas-bucket-log"
+#   #add role arn without using the data source
+#   role_arn = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/terraform"
+# }
+
 
 resource "aws_cloudwatch_metric_alarm" "high_cpu_alarm" {
   alarm_name          = "Caio_HighCPUUtilization"

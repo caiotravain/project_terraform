@@ -27,6 +27,12 @@ output "my_vpc_id" {
   value = aws_vpc.my_vpc.id
 }
 
+module "aws_logs" {
+  source         = "trussworks/logs/aws"
+  s3_bucket_name = "travas-bucket-log"
+  default_allow  = false
+  allow_elb      = true
+}
 
 
 
@@ -61,9 +67,38 @@ module "network" {
   security_group_id = module.network.security_group_id
 }
 
-output "url" {
-  value = module.rds.postgres_url
-  sensitive = true
+
+
+variable "node_size" {
+    description = "Size of total nodes"
+    default = 2
 }
 
+variable "locust_plan_filename" {
+    default = "locust/basic.py"
+}
 
+module "loadtest-distribuited" {
+
+    source  = "marcosborges/loadtest-distribuited/aws"
+
+    name = "nome-da-implantacao-locust"
+    nodes_size = var.node_size
+    executor = "locust"
+    loadtest_dir_source = "./plan/"
+
+    # LEADER ENTRYPOINT
+    loadtest_entrypoint = <<-EOT
+        python3 -m pip install urllib3==1.26.15
+         nohup locust  -f ../loadtest/locust/basic.py --expect-workers=2  --master > ../loadtest/locust-leader.out 2>&1 &
+    EOT
+
+    # NODES ENTRYPOINT
+    node_custom_entrypoint = <<-EOT
+        python3 -m pip install urllib3==1.26.15
+        nohup locust -f ../loadtest/locust/basic.py  --worker --master-host={LEADER_IP} > ../loadtest/locust-worker.out 2>&1 &
+    EOT
+
+    subnet_id = module.network.rds_subnet_public_2
+    locust_plan_filename = var.locust_plan_filename
+}
