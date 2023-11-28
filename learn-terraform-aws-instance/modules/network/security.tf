@@ -1,7 +1,7 @@
 
 resource "aws_security_group" "rds_sg" {
-  name        = "rds_sg"
-  description = "Permite trafego HTTP/HTTPS para o ALB"
+  name        = "caio-rds-sg"
+  description = "Permite trafego para o ALB"
   vpc_id      = var.vpc_id
 
   ingress{

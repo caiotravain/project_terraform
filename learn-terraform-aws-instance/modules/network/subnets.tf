@@ -5,7 +5,7 @@ resource "aws_subnet" "my_subnet" {
   availability_zone = "us-east-1a"
 
   tags = {
-    Name = "tf-example"
+    Name = "caio-subnet-1"
   }
 }
 resource "aws_subnet" "my_subnet2" {
@@ -14,7 +14,7 @@ resource "aws_subnet" "my_subnet2" {
   availability_zone = "us-east-1b"
 
   tags = {
-    Name = "tf-example"
+    Name = "caio-subnet-2"
   }
 }
 

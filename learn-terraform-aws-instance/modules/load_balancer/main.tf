@@ -2,7 +2,7 @@
 
 # Create an Elastic Load Balancer (ELB)
 resource "aws_lb" "example_lb" {
-  name               = "example-lb"
+  name               = "caio-elb"
   internal           = false
   load_balancer_type = "application"
   security_groups    = [var.security_group_id]  # Attach the security group created earlier
@@ -26,7 +26,7 @@ resource "aws_lb_listener" "example_listener" {
 
 # Create a target group for the ELB
 resource "aws_lb_target_group" "example_target_group" {
-  name     = "example-target-group"
+  name     = "caio-target-group"
   port     = 3000  # Specify the port where your application is running (adjust if needed)
   protocol = "HTTP"
   vpc_id   = var.vpc_id

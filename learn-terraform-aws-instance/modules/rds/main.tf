@@ -36,7 +36,7 @@ resource "aws_db_instance" "example_rds" {
 
   # Tags (optional but recommended)
   tags = {
-    Name        = "example-rds-instance"
+    Name        = "CAIO-rds-instance"
     Environment = "production"
   }
 }

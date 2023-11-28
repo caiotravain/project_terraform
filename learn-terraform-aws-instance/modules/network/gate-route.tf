@@ -3,10 +3,16 @@
 
 resource "aws_internet_gateway" "example_igw" {
   vpc_id = var.vpc_id
+  tags = {
+    Name = "CAIO - IGW"
+  }
 }
 
 resource "aws_eip" "nat" {
 depends_on = [aws_internet_gateway.example_igw]
+  tags = {
+    Name = "CAIO - EIP  "
+  }
 }
 
 resource "aws_nat_gateway" "nat" {
@@ -14,7 +20,7 @@ resource "aws_nat_gateway" "nat" {
   subnet_id     = var.rds_subnet_ids[2]  # Specify the subnet ID of the public subnet
 
   tags = {
-    Name = "nat"
+    Name = "CAIO - NAT"
   }
 
   depends_on = [aws_internet_gateway.example_igw]

@@ -1,9 +1,9 @@
 
-#create caio personal key
-resource "tls_private_key" "caio_personal_key" {
-  algorithm = "RSA"
-  rsa_bits = 4096
-}
+# #create caio personal key
+# resource "tls_private_key" "caio_personal_key" {
+#   algorithm = "RSA"
+#   rsa_bits = 4096
+# }
 
 
 resource "aws_launch_template" "ec2_example" {
@@ -24,7 +24,7 @@ resource "aws_launch_template" "ec2_example" {
     ]
     associate_public_ip_address = true
   }
-  depends_on = [ tls_private_key.caio_personal_key ]
+  # depends_on = [ tls_private_key.caio_personal_key ]
 }
 
 

@@ -6,12 +6,21 @@ terraform {
     region  = "us-east-1"
     encrypt = true
   }
+
   required_version = ">= 1.2.0"
 }
 
 
 provider "aws" {
   region = "us-east-1"
+   default_tags {
+    tags = {
+      Environment     = "Caio"
+      Service         = "CAIO-SERVICE"
+      CostCenter  = "CAIO-COSTCENTER"
+      # project = aws_ce_cost_allocation_tag.example.tag_value
+    }
+  }
 }
 
 resource "aws_vpc" "my_vpc" {
@@ -19,19 +28,12 @@ resource "aws_vpc" "my_vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    Name = "tf-example"
+    Name = "caio-vpc"
   }
 }
 
 output "my_vpc_id" {
   value = aws_vpc.my_vpc.id
-}
-
-module "aws_logs" {
-  source         = "trussworks/logs/aws"
-  s3_bucket_name = "travas-bucket-log"
-  default_allow  = false
-  allow_elb      = true
 }
 
 
@@ -99,6 +101,35 @@ module "loadtest-distribuited" {
         nohup locust -f ../loadtest/locust/basic.py  --worker --master-host={LEADER_IP} > ../loadtest/locust-worker.out 2>&1 &
     EOT
 
+
     subnet_id = module.network.rds_subnet_public_2
     locust_plan_filename = var.locust_plan_filename
 }
+
+
+output "dashboard_url" {
+    value = "http://${coalesce(module.loadtest-distribuited.leader_public_ip, module.loadtest-distribuited.leader_private_ip)}"
+    description = "The URL of the Locust UI."
+}
+
+
+#   aws_security_group.rds_sg.id = aws_security_group.loadtest.id
+
+
+
+data "aws_security_group" "loadtest_sg" {
+  name = "nome-da-implantacao-locust-loadtest-seg"  # Replace with the actual name of your security group
+  depends_on = [module.loadtest-distribuited]
+}
+resource "aws_security_group_rule" "loadtest_sg_rule" {
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 0
+  protocol          = "-1"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = data.aws_security_group.loadtest_sg.id
+}
+
+
+
+
