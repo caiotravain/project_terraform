@@ -77,7 +77,7 @@ Aplicação é um docker que se instala com usando o  script “install.sh” e 
 Preparativos:
 
 - Primeiro pegue seu SECRET TOKENS e configure usando o aws\_cli
-- Crie um bucket manual e coloque o nome dele nesse trecho do código no lugar “bucket”
+- Crie um bucket manualmente e coloque o nome dele nesse trecho do código no lugar “bucket”
 ![](comeco.png)
 
 
