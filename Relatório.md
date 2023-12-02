@@ -79,16 +79,14 @@ Preparativos:
 - Primeiro pegue seu SECRET TOKENS e configure usando o aws\_cli
 - Crie um bucket manual e coloque o nome dele nesse trecho do código no lugar “bucket”
 - terraform {
-
-- `    `backend "s3" {
-- `    `bucket  = "travas-bucket"
-- `    `key     = "tf-states/terraform.tfstate"
-- `    `region  = "us-east-1"
-- `    `encrypt = true
-- `  `}
-
-- `  `required\_version = ">= 1.2.0"
-- }
+ `    `backend "s3" {
+ `   <b> `bucket  = "travas-bucket" <\b>
+ `    `key     = "tf-states/terraform.tfstate"
+ `    `region  = "us-east-1"
+ `    `encrypt = true
+ `  `}
+`  `required\_version = ">= 1.2.0"
+  }
 
 - De um *terraform init*
 - De um *terraform Plan*
