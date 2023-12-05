@@ -16,7 +16,6 @@ resource "aws_launch_template" "ec2_example" {
     create_before_destroy = true
   }
 
-  key_name = "caio personal key"
 
   network_interfaces {
     security_groups = [
