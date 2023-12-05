@@ -81,7 +81,7 @@ Preparativos:
 ![](comeco.png)
 
 
-- De um *terraform init*
+- Acesse o diretório "/learn-terraform-aws-instance" e de um *terraform init*
 - De um *terraform Plan*
 - De um *terraform apply*
 - Para acessar sua aplicação vá para o painel da aws e pesquise por “load balancer” e clique no seu Load balancer e acesse o link em “Nome do DNS”
